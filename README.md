@@ -1,16 +1,19 @@
 # Scaladbg
 Parallel assembly algorithm building on top of IDBA. This is described in our BCB-17 and BMC Genomics-17 papers.
 
-#Some instructions
+#Instructions
+
 Get idba from either https://github.com/loneknightpy/idba or http://hku-idba.googlecode.com/files/idba-1.1.1.tar.gz
 
 To build the ScalaDBG_SP version:
+
     cp scaladbg_sp_ud.cpp idba/src/release/idba_ud.cpp
     cd idba/
     ./build.sh   
     ./configure CXX=mpic++ CXXFLAGS=-lrt
 
 To build the ScalaDBG_PP version:
+
     cp scaladbg_pp_ud.cpp idba/src/release/idba_ud.cpp
     cd idba/
     ./build.sh   
@@ -29,8 +32,11 @@ Rhodobacter sphaeroides(real): http://gage.cbcb.umd.edu/data/Rhodobacter_sphaero
 Rhodobacter sphaeroides(reference): http://gage.cbcb.umd.edu/data/Rhodobacter_sphaeroides/
  
 
-CAMI  https://s3-eu-west-1.amazonaws.com/cami-data-eu/CAMI_low/RL_S001__insert_270.fq.gz
+CAMI 
+
+https://s3-eu-west-1.amazonaws.com/cami-data-eu/CAMI_low/RL_S001__insert_270.fq.gz
 
 
 All .fastq files were converted using the following:
+
     ./idba/bin/fq2fa —-merge read1.fastq read2.fastq output.fa
