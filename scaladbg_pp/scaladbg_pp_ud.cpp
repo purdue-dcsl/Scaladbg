@@ -136,8 +136,7 @@ static void newBuildHashGraph(int kmer_size, HashGraph& hash_graph);
 static void UpdateHashGraph(int old_kmer_size,int kmer_size, HashGraph& hash_graph, int min_support, int rank);
 static void get_max(std::vector<int> &ranks_left, std::vector<int> &curr_kvals, int &idx);
 static void build_matrices(int size, int numkmers, std::vector<std::vector<int> >&send_recv,
-    std::vector<std::vector<int> >&communication,std::vector<std::vector<int> >&k_val_work, 
-    std::queue<int> kvals);
+    std::vector<std::vector<int> >&communication,std::vector<std::vector<int> >&k_val_work);
 static void print_vectors(vector< vector <int> > &k_val_work,vector< vector <int> >&send_recv,
     vector< vector <int> >&communication);
 void Assemble(HashGraph &hash_graph);
@@ -148,17 +147,9 @@ void Scaffold(int kmer_size, int min_contig);
 void AddPairs(int level, ScaffoldGraph &scaffold_graph, const string &read_file, const string &align_file);
 void AlignReads(const string &contig_file, ShortReadLibrary &library, const string &align_file);
 
-<<<<<<< HEAD:mpiBig/idba_ud.cpp
-int main(int argc, char *argv[])
-{
-    double readTime, precorTime, recvTime;
-    double   sendTime,totalTime;
-    // double assemTime,alignTime, corrTime, scaffTime,buildTime,updateTime;
-=======
 int main(int argc, char *argv[]){
     double readTime, recvTime;
     double sendTime,totalTime;
->>>>>>> testing:scaladbg_pp/scaladbg_pp_ud.cpp
     int rank;
     int size;
     OptionsDescription desc;
@@ -286,12 +277,7 @@ int main(int argc, char *argv[]){
                 k_val_work[rank].erase(k_val_work[rank].begin());//pop off k_value we are going to build
                 HashGraph hash_graph(kmer_size);
                 newBuildHashGraph(kmer_size,hash_graph);
-<<<<<<< HEAD:mpiBig/idba_ud.cpp
-                newbuildTime +=MPI_Wtime();
-                printf("New Build time for rank %i nad ksize %i took %f seconds\n",rank, kmer_size, newbuildTime);
-=======
                 
->>>>>>> testing:scaladbg_pp/scaladbg_pp_ud.cpp
                 if((i+1) < send_recv[rank].size() && send_recv[rank][i+1] == RECV){//if we are receiving next we will patch, need contigs from this one to patch :)
                     Assemble(hash_graph);
                 }
@@ -302,11 +288,6 @@ int main(int argc, char *argv[]){
                     outfile.open(filename, ios::binary | ios::out);
                     outfile << hash_graph;
                     outfile.close();
-<<<<<<< HEAD:mpiBig/idba_ud.cpp
-                    writingTime += MPI_Wtime();
-                    printf("Write time for rank %i and ksize %i took %f seconds\n",rank, kmer_size, writingTime);
-=======
->>>>>>> testing:scaladbg_pp/scaladbg_pp_ud.cpp
                 }
                 build_time += MPI_Wtime();
                 if(TIMING)printf("Build time for kmer_size %i is %f seconds\n",kmer_size,build_time);
@@ -318,25 +299,6 @@ int main(int argc, char *argv[]){
             int source = communication[rank][i];
             MPI_Recv(&rec_kmer_size,1,MPI_INT,source,0, MPI_COMM_WORLD, &status);
             recvTime += MPI_Wtime();
-<<<<<<< HEAD:mpiBig/idba_ud.cpp
-            printf("Rank %i Receiving from %i took %f seconds, kmer_size recv is %i\n",rank, source,recvTime, rec_kmer_size);
-
-            // double alignTime = -MPI_Wtime();
-            // AlignReads(option.contig_file(kmer_size), option.align_file(kmer_size));
-            // alignTime += MPI_Wtime();
-            // double corrTime = -MPI_Wtime();
-            // CorrectReads(kmer_size);
-            // corrTime += MPI_Wtime();
-            // printf("Align Reads for kmer size %i took %f seconds\n", kmer_size,alignTime);
-            // printf("Correct Reads for kmer size %i took %f seconds\n", kmer_size,corrTime);
-            // assembly_info.ClearStatus();
-            // double local_time = -MPI_Wtime();
-            // LocalAssembly(kmer_size, rec_kmer_size);
-            // local_time +=MPI_Wtime();
-            // printf("Rank %i Local Assembly with new ksize %i took %f seconds\n",rank, rec_kmer_size,local_time);
-            double patch_time = -MPI_Wtime();
-
-=======
             if(TIMING)printf("Rank %i Receiving from %i took %f seconds, kmer_size recv is %i\n",rank, source,recvTime, rec_kmer_size);
             double align_time = -MPI_Wtime();
             AlignReads(option.contig_file(kmer_size), option.align_file(kmer_size));
@@ -355,27 +317,17 @@ int main(int argc, char *argv[]){
 
 
             double patch_time = -MPI_Wtime();
->>>>>>> testing:scaladbg_pp/scaladbg_pp_ud.cpp
             //patch now
             char filename [33];
             int old_kmer_size = kmer_size;
             kmer_size = rec_kmer_size;
             HashGraph new_hash_graph(kmer_size);
             ifstream infile;
-<<<<<<< HEAD:mpiBig/idba_ud.cpp
-            sprintf (filename,"%d",kmer_size);
-            infile.open(filename, ios::binary | ios::in);
-            infile>>new_hash_graph;
-            infile.close();
-            
-            UpdateHashGraph(old_kmer_size,kmer_size,new_hash_graph,option.min_count);
-=======
             sprintf (filename,"%s/%d",option.directory.c_str(),kmer_size);
             infile.open(filename, ios::binary | ios::in);
             infile>>new_hash_graph;
             infile.close();
             UpdateHashGraph(old_kmer_size,kmer_size,new_hash_graph,option.min_count, rank);
->>>>>>> testing:scaladbg_pp/scaladbg_pp_ud.cpp
             patch_time += MPI_Wtime();
             if(TIMING)printf("Patching or UpdateHashGraph for kmer_size %i took %f seconds\n",kmer_size,patch_time);
             if(((i+1) < send_recv[rank].size() && send_recv[rank][i+1] == RECV)){//if we are receiving next we will patch, need contigs from this one to patch :)
