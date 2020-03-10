@@ -9,13 +9,15 @@ To build the ScalaDBG_SP version:
 
     cp scaladbg_sp_ud.cpp idba/src/release/idba_ud.cpp
     cd idba/
+    # Now change build.sh: Change the line with ./configure to: ./configure CXX=mpic++ CXXFLAGS=-lrt
     ./build.sh   
-    ./configure CXX=mpic++ CXXFLAGS=-lrt
+    #./configure CXX=mpic++ CXXFLAGS=-lrt
 
 To build the ScalaDBG_PP version:
 
     cp scaladbg_pp_ud.cpp idba/src/release/idba_ud.cpp
     cd idba/
+    # Now change build.sh: Change the line with  ./configure to: ./configure CXX=mpic++ CXXFLAGS=-lrt
     ./build.sh   
     ./configure CXX=mpic++ CXXFLAGS=-lrt
 
